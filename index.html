@@ -3,283 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LMS Admin Dashboard</title>
+    <title>LMS Application</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-        }
-
-        .navbar {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .container {
-            margin: 20px;
         }
 
         .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            background: white;
+            background: #fff;
             padding: 20px;
+            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .dashboard-container {
-            display: none;
-        }
-
-        h2 {
-            text-align: center;
+        form {
+            display: flex;
+            flex-direction: column;
         }
 
         label {
-            display: block;
-            margin-top: 10px;
+            margin: 10px 0 5px;
         }
 
-        input[type="text"],
-        input[type="password"],
-        input[type="email"] {
-            width: 100%;
+        input {
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
             border-radius: 4px;
         }
 
         button {
-            width: 100%;
             padding: 10px;
-            background-color: #007bff;
-            color: white;
+            background: #007BFF;
+            color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background: #0056b3;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
+        .avatar-dropdown {
+            position: relative;
+            display: inline-block;
             margin-top: 20px;
         }
 
-        .card {
-            background: white;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        .avatar-dropdown .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
         }
 
-        .card h3 {
-            margin: 0;
+        .avatar-dropdown:hover .dropdown-content {
+            display: block;
         }
 
-        .logout-button {
-            background-color: red;
+        .dropdown-content button {
+            padding: 10px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+
+        .dropdown-content button:hover {
+            background: #0056b3;
         }
 
         .modal {
             display: none;
             position: fixed;
-            top: 0;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
             justify-content: center;
             align-items: center;
         }
 
         .modal-content {
-            background: white;
+            background-color: #fefefe;
+            margin: 15% auto;
             padding: 20px;
-            border-radius: 5px;
+            border: 1px solid #888;
+            width: 80%;
         }
-
-        .modal-close {
-            background-color: red;
-            color: white;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-
-        .profile-image {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .profile-image img {
-            width: 100px;
-            border-radius: 50%;
-        }
-
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <h1>LMS Admin Dashboard</h1>
-    </div>
-
     <div class="login-container">
-        <h2>Admin Login</h2>
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="Enter Email">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter Password">
-        <button id="loginBtn">Login</button>
+        <form id="login-form">
+            <h2>Login</h2>
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
     </div>
 
-    <div class="dashboard-container">
-        <div class="navbar">
-            <h2>Welcome, Admin</h2>
-            <button id="logoutBtn" class="logout-button">Logout</button>
-        </div>
-
-        <div class="container">
-            <h3>Admin Functions</h3>
-            <div class="dashboard">
-                <div class="card">
-                    <h3>Add Single User</h3>
-                    <button onclick="showModal('addUserModal')">Add User</button>
-                </div>
-                <div class="card">
-                    <h3>Bulk Upload Users</h3>
-                    <button onclick="showModal('bulkUploadModal')">Bulk Upload</button>
-                </div>
-                <div class="card">
-                    <h3>Manage Vessels</h3>
-                    <button onclick="showModal('manageVesselsModal')">Manage Vessels</button>
-                </div>
-            </div>
-
-            <h3>Filter and Export User List</h3>
-            <input type="text" placeholder="Search users" id="searchUsers" oninput="filterUsers()">
-            <button onclick="exportUsers()">Export to Excel</button>
-
-            <table id="userTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Vessel</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Example rows -->
-                    <tr>
-                        <td>John Doe</td>
-                        <td>john@example.com</td>
-                        <td>Vessel 1</td>
-                        <td>Registered</td>
-                        <td><button onclick="impersonateUser('John Doe')">Impersonate</button></td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="avatar-dropdown">
+        <img src="avatar.png" alt="Profile" id="profile-avatar" style="width: 50px; height: 50px; border-radius: 50%; cursor: pointer;">
+        <div class="dropdown-content">
+            <button id="logout-button">Logout</button>
         </div>
     </div>
 
-    <!-- Modals -->
-    <div id="addUserModal" class="modal">
+    <div id="logout-modal" class="modal">
         <div class="modal-content">
-            <h3>Add New User</h3>
-            <label for="newUserName">Name</label>
-            <input type="text" id="newUserName">
-            <label for="newUserEmail">Email</label>
-            <input type="email" id="newUserEmail">
-            <label for="vesselName">Vessel</label>
-            <input type="text" id="vesselName">
-            <button onclick="addUser()">Add User</button>
-            <button class="modal-close" onclick="closeModal('addUserModal')">Close</button>
-        </div>
-    </div>
-
-    <div id="bulkUploadModal" class="modal">
-        <div class="modal-content">
-            <h3>Bulk Upload Users</h3>
-            <input type="file" id="bulkUploadFile">
-            <button onclick="bulkUpload()">Upload</button>
-            <button class="modal-close" onclick="closeModal('bulkUploadModal')">Close</button>
-        </div>
-    </div>
-
-    <div id="manageVesselsModal" class="modal">
-        <div class="modal-content">
-            <h3>Manage Vessels</h3>
-            <!-- Vessel management form -->
-            <label for="vesselName">Vessel Name</label>
-            <input type="text" id="vesselInput">
-            <button onclick="updateVessel()">Update Vessel</button>
-            <button class="modal-close" onclick="closeModal('manageVesselsModal')">Close</button>
+            <p>Are you sure you want to logout?</p>
+            <button id="confirm-logout">Yes</button>
+            <button id="cancel-logout">No</button>
         </div>
     </div>
 
     <script>
-        // Login function
-        document.getElementById("loginBtn").addEventListener("click", function() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            if (email === "admin@example.com" && password === "password") {
-                document.querySelector(".login-container").style.display = "none";
-                document.querySelector(".dashboard-container").style.display = "block";
-            } else {
-                alert("Invalid login credentials");
-            }
+        // Login Form Logic
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Add login logic here
+            alert('Logged in successfully!');
         });
 
-        // Logout function
-        document.getElementById("logoutBtn").addEventListener("click", function() {
-            if (confirm("Are you sure you want to logout?")) {
-                document.querySelector(".login-container").style.display = "block";
-                document.querySelector(".dashboard-container").style.display = "none";
-            }
+        // Logout Logic
+        document.getElementById('logout-button').addEventListener('click', function() {
+            document.getElementById('logout-modal').style.display = 'flex';
         });
 
-        // Modals management
-        function showModal(modalId) {
-            document.getElementById(modalId).style.display = "flex";
-        }
+        document.getElementById('confirm-logout').addEventListener('click', function() {
+            // Add logout logic here
+            alert('Logged out successfully!');
+            document.getElementById('logout-modal').style.display = 'none';
+        });
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = "none";
-        }
-
-        // Add User
-        function addUser() {
-            const name = document.getElementById("newUserName").value;
-            const email = document.getElementById("newUserEmail").value;
-            const vessel = document.getElementById("vesselName").value;
-            // Add user to table (you can enhance this part to connect with a backend)
-            let table = document.getElementById("userTable").getElementsBy
+        document.getElementById('cancel-logout').addEventListener('click', function() {
+            document.getElementById('logout-modal').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
